@@ -4,10 +4,24 @@ import axios from "axios";
 
 import QuantityOfProducts from "../QuantityOfProducts/QuantityOfProducts";
 
+let updateQuantity;
+
+const productCheck = (product, action, changeQuqntityCallback) => {
+    axios.post("http://localhost:3030/api/product/check", product)
+    .then((res) => {
+      changeQuqntityCallback(product.pid, action)
+    })
+    .catch((error) => console.log(error.response.data.message)
+    )
+}
+
 const App = () => {
   const [cart, setCart] = useState({});
   const totalPrice = Object.values(cart).reduce(
-    (acc, curr) => acc + curr.quantity * curr.price,
+    (acc, curr) => 
+      Math.round(
+        (acc + curr.quantity * parseFloat(curr.price) + Number.EPSILON) * 100
+      ) / 100,
     0
   );
 
@@ -22,11 +36,10 @@ const App = () => {
           }),
           {}
         );
-        console.log(cart);
         setCart(cart);
       })
       .catch((error) => {
-        console.log("error", error);
+        console.log(error.response.data.message)
       });
   };
 
@@ -34,29 +47,32 @@ const App = () => {
     getDate();
   }, []);
 
-  const handleAddProduct = (pid) => {
-    const updateQuantity = {
-      ...cart,
-      [pid]: { ...cart[pid], quantity: cart[pid].quantity + 1 },
-    };
-    setCart(updateQuantity);
+  const handleChangeTheQuantityProduct = (pid, action) => {
+     productCheck({pid, quantity: 1}, action, changeQuqntity);
   };
 
-  const handleRemoveProduct = (pid) => {
-    const quantity = { [pid]: quantityProducts[pid] - 1 };
-    const updateQuantity = { ...quantityProducts, ...quantity };
-    setQuantityProducts(updateQuantity);
-  };
+  const changeQuqntity = (pid, action) => {
+    action === "add"
+    ? (updateQuantity = {
+        ...cart,
+        [pid]: { ...cart[pid], quantity: cart[pid].quantity + 1 },
+      })
+    : (updateQuantity = {
+        ...cart,
+        [pid]: { ...cart[pid], quantity: cart[pid].quantity - 1 },
+      });
 
-  const productsCart = Object.values(cart).map((product, index) => {
+      setCart(updateQuantity);
+  }
+
+  const productsCart = Object.values(cart).map((product) => {
     return (
       <li className="row" key={product.pid}>
         {product.name}, cena: {parseFloat(product.price)} zł{" "}
         <QuantityOfProducts
           product={product}
           quantityProduct={product.quantity}
-          addProduct={handleAddProduct}
-          removeProduct={handleRemoveProduct}
+          changeTheQuantityProduct={handleChangeTheQuantityProduct}
         />
       </li>
     );
