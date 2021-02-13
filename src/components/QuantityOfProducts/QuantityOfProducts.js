@@ -27,17 +27,17 @@ const QuantityOfProducts = ({
   const { pid, min, max, isBlocked } = product;
 
   return (
-    <div>
+    <div className="quantity-products-container">
+      <p>
+        Obecnie masz {quantityProduct}{" "}
+        {polishPlural("sztukę", "sztuki", "sztuk", quantityProduct)} produktu
+      </p>
       <button disabled={isBlocked} onClick={() => changeTheQuantityProduct(pid, "remove")}>
         -
       </button>
       <button disabled={isBlocked} onClick={() => changeTheQuantityProduct(pid, "add")}>
         +
       </button>
-      <p>
-        Obecnie masz {quantityProduct}{" "}
-        {polishPlural("sztukę", "sztuki", "sztuk", quantityProduct)} produktu
-      </p>
     </div>
   );
 };
