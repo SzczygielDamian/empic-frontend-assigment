@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 
 import axios from "axios";
 import { debounce } from "lodash";
@@ -21,19 +21,25 @@ const productCheck = (
       changeQuqntityCallback(product.pid, action);
     })
     .catch((error) => {
-      console.log(error.response.data.message);
+      alert(error.response.data.message);
+
       resetToMinQuantityCallback(product.pid);
     });
 };
 
 const App = () => {
   const [cart, setCart] = useState({});
-  const totalPrice = Object.values(cart).reduce(
-    (acc, curr) =>
-      Math.round(
-        (acc + curr.quantity * parseFloat(curr.price) + Number.EPSILON) * 100
-      ) / 100,
-    0
+  const totalPrice = useMemo(
+    () =>
+      Object.values(cart).reduce(
+        (acc, curr) =>
+          Math.round(
+            (acc + curr.quantity * parseFloat(curr.price) + Number.EPSILON) *
+              100
+          ) / 100,
+        0
+      ),
+    [cart]
   );
 
   const getDate = () => {
@@ -94,7 +100,9 @@ const App = () => {
   const productsCart = Object.values(cart).map((product) => {
     return (
       <li className="row" key={product.pid}>
-        <p>{product.name}, cena: {parseFloat(product.price)} zł{" "}</p>
+        <p>
+          {product.name}, cena: {parseFloat(product.price)} zł{" "}
+        </p>
         <QuantityOfProducts
           product={product}
           quantityProduct={product.quantity}
