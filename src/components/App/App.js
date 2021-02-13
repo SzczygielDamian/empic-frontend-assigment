@@ -7,7 +7,8 @@ import QuantityOfProducts from "../QuantityOfProducts/QuantityOfProducts";
 
 import "./App.css";
 
-let updateQuantity;
+const getUpdateQuantity = (quantity, action) =>
+  quantity + (action === "add" ? +1 : -1);
 
 const productCheck = (
   product,
@@ -22,7 +23,6 @@ const productCheck = (
     })
     .catch((error) => {
       alert(error.response.data.message);
-
       resetToMinQuantityCallback(product.pid);
     });
 };
@@ -67,23 +67,22 @@ const App = () => {
   }, []);
 
   const handleChangeTheQuantityProduct = debounce((pid, action) => {
-    let checkedProduct;
-    action === "add"
-      ? (checkedProduct = { pid, quantity: cart[pid].quantity + 1 })
-      : (checkedProduct = { pid, quantity: cart[pid].quantity - 1 });
+    const checkedProduct = {
+      pid,
+      quantity: getUpdateQuantity(cart[pid].quantity, action),
+    };
+
     productCheck(checkedProduct, action, changeQuqntity, resetToMinQuantity);
   }, 500);
 
   const changeQuqntity = (pid, action) => {
-    action === "add"
-      ? (updateQuantity = {
-          ...cart,
-          [pid]: { ...cart[pid], quantity: cart[pid].quantity + 1 },
-        })
-      : (updateQuantity = {
-          ...cart,
-          [pid]: { ...cart[pid], quantity: cart[pid].quantity - 1 },
-        });
+    const updateQuantity = {
+      ...cart,
+      [pid]: {
+        ...cart[pid],
+        quantity: getUpdateQuantity(cart[pid].quantity, action),
+      },
+    };
 
     setCart(updateQuantity);
   };

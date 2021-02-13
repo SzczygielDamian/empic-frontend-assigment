@@ -1,41 +1,21 @@
-.container{
-    width: 1000px;
-    margin: 100px auto 0 auto;
+.container {
+  width: 1000px;
+  margin: 100px auto 0 auto;
 }
 
 .row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid silver;
-    list-style: none;
-}
-
-button {
-    width: 2vw;
-    height: 2vw;
-    background: #fff;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: rgb(102, 100, 100);
-    color: #fff;
-}
-
-button:disabled {
-    background: #dddddd;
-    color: #b8b6b6;
-    cursor: not-allowed;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid silver;
+  list-style: none;
 }
 
 .quantity-products-container {
-    float: right;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    width: 20vw;
+  float: right;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 20vw;
 }

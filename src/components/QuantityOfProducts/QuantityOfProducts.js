@@ -1,5 +1,7 @@
 import React from "react";
 
+import "./QuantityOfProducts.css";
+
 function polishPlural(
   singularNominativ,
   pluralNominativ,
@@ -20,26 +22,30 @@ function polishPlural(
 }
 
 const QuantityOfProducts = ({
-  product,
+  product: { pid, isBlocked },
   quantityProduct,
   changeTheQuantityProduct,
-}) => {
-  const { pid, min, max, isBlocked } = product;
-
-  return (
-    <div className="quantity-products-container">
-      <p>
-        Obecnie masz {quantityProduct}{" "}
-        {polishPlural("sztukę", "sztuki", "sztuk", quantityProduct)} produktu
-      </p>
-      <button disabled={isBlocked} onClick={() => changeTheQuantityProduct(pid, "remove")}>
-        -
-      </button>
-      <button disabled={isBlocked} onClick={() => changeTheQuantityProduct(pid, "add")}>
-        +
-      </button>
-    </div>
-  );
-};
+}) => (
+  <div className="quantity-products-container">
+    <p>
+      Obecnie masz {quantityProduct}
+      {polishPlural("sztukę", "sztuki", "sztuk", quantityProduct)} produktu
+    </p>
+    <button
+      className="quantity-button"
+      disabled={isBlocked}
+      onClick={() => changeTheQuantityProduct(pid, "remove")}
+    >
+      -
+    </button>
+    <button
+      className="quantity-button"
+      disabled={isBlocked}
+      onClick={() => changeTheQuantityProduct(pid, "add")}
+    >
+      +
+    </button>
+  </div>
+);
 
 export default QuantityOfProducts;
