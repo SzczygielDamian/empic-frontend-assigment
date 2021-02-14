@@ -1,12 +1,12 @@
-import React from "react";
+import * as React from 'react';
 
 import "./QuantityOfProducts.css";
 
 function polishPlural(
-  singularNominativ,
-  pluralNominativ,
-  pluralGenitive,
-  value
+  singularNominativ: any,
+  pluralNominativ: any,
+  pluralGenitive: any,
+  value: any
 ) {
   if (value === 1) {
     return singularNominativ;
@@ -21,7 +21,13 @@ function polishPlural(
   }
 }
 
-const QuantityOfProducts = ({
+export interface QuantityOfProductsProps {
+  product: any,
+  quantityProduct: any,
+  changeTheQuantityProduct: any,
+}
+ 
+const QuantityOfProducts: React.FC<QuantityOfProductsProps> = ({
   product: { pid, isBlocked },
   quantityProduct,
   changeTheQuantityProduct,

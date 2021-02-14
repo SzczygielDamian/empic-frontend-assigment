@@ -1,38 +1,48 @@
-import React, { useEffect, useState, useMemo } from "react";
 
-import axios from "axios";
-import { debounce } from "lodash";
+import React, { useEffect, useMemo, useState } from "react";
+import axios from "../../../node_modules/axios/index";
+
+import * as _ from 'lodash';
 
 import QuantityOfProducts from "../QuantityOfProducts/QuantityOfProducts";
 
 import "./App.css";
 
-const getUpdateQuantity = (quantity, action) =>
+import { ICart } from "../../shared/interface/cart.interface";
+import { IProductsCart } from "../../shared/interface/productCart.interface";
+
+
+
+const getUpdatedQuantity = (quantity: number, action: string) =>
   quantity + (action === "add" ? +1 : -1);
 
 const productCheck = (
-  product,
-  action,
-  changeQuqntityCallback,
-  resetToMinQuantityCallback
+  product: any,
+  action: any,
+  changeQuantityCallback: any,
+  resetToMinQuantityCallback: any
 ) => {
   axios
     .post("http://localhost:3030/api/product/check", product)
-    .then((res) => {
-      changeQuqntityCallback(product.pid, action);
+    .then((res: any) => {
+      changeQuantityCallback(product.pid, action);
     })
-    .catch((error) => {
+    .catch((error: any) => {
       alert(error.response.data.message);
       resetToMinQuantityCallback(product.pid);
     });
 };
 
-const App = () => {
-  const [cart, setCart] = useState({});
+export interface AppProps {
+}
+ 
+const App: React.FC<AppProps> = () => {
+
+  const [cart, setCart] = useState<IProductsCart>({});
   const totalPrice = useMemo(
     () =>
       Object.values(cart).reduce(
-        (acc, curr) =>
+        (acc: any, curr: any) =>
           Math.round(
             (acc + curr.quantity * parseFloat(curr.price) + Number.EPSILON) *
               100
@@ -45,9 +55,9 @@ const App = () => {
   const getDate = () => {
     axios
       .get("http://localhost:3030/api/cart")
-      .then((data) => {
+      .then((data: any) => {
         const cart = data.data.reduce(
-          (acc, curr) => ({
+          (acc: any, curr: any) => ({
             ...acc,
             [curr.pid]: { ...curr, quantity: curr.min },
           }),
@@ -55,7 +65,7 @@ const App = () => {
         );
         setCart(cart);
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error.response.data.message);
       });
   };
@@ -66,28 +76,28 @@ const App = () => {
     return () => handleChangeTheQuantityProduct.cancel();
   }, []);
 
-  const handleChangeTheQuantityProduct = debounce((pid, action) => {
+  const handleChangeTheQuantityProduct = _.debounce((pid: string, action: string) => {
     const checkedProduct = {
       pid,
-      quantity: getUpdateQuantity(cart[pid].quantity, action),
+      quantity: getUpdatedQuantity(cart[pid].quantity, action),
     };
 
-    productCheck(checkedProduct, action, changeQuqntity, resetToMinQuantity);
+    productCheck(checkedProduct, action, changeQuantity, resetToMinQuantity);
   }, 500);
 
-  const changeQuqntity = (pid, action) => {
+  const changeQuantity = (pid: string, action: string) => {
     const updateQuantity = {
       ...cart,
       [pid]: {
         ...cart[pid],
-        quantity: getUpdateQuantity(cart[pid].quantity, action),
+        quantity: getUpdatedQuantity(cart[pid].quantity, action),
       },
     };
 
     setCart(updateQuantity);
   };
 
-  const resetToMinQuantity = (pid) => {
+  const resetToMinQuantity = (pid: string) => {
     const resetQuantity = {
       ...cart,
       [pid]: { ...cart[pid], quantity: cart[pid].min },
@@ -96,7 +106,7 @@ const App = () => {
     setCart(resetQuantity);
   };
 
-  const productsCart = Object.values(cart).map((product) => {
+  const productsCart = Object.values(cart).map((product: ICart) => {
     return (
       <li className="row" key={product.pid}>
         <p>
@@ -114,6 +124,7 @@ const App = () => {
   return (
     <div className="container">
       <h3>Lista produktów</h3>
+      {console.log(cart)}
       <ul>
         {productsCart}
         <p>Całkowita suma zamówienia: {totalPrice}</p>
