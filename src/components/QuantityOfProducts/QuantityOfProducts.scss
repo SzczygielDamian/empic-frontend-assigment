@@ -1,0 +1,19 @@
+.quantity-button {
+  width: 2vw;
+  height: 2vw;
+  background: #fff;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgb(102, 100, 100);
+    color: #fff;
+  }
+
+  &:disabled {
+    background: #dddddd;
+    color: #b8b6b6;
+    cursor: not-allowed;
+  }
+}

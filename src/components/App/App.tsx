@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 
 import QuantityOfProducts from "../QuantityOfProducts/QuantityOfProducts";
 
-import "./App.css";
+import "./App.scss";
 
 import { ICart } from "../../shared/interface/cart.interface";
 import { IProductsCart } from "../../shared/interface/productCart.interface";
@@ -108,7 +108,7 @@ const App: React.FC<AppProps> = () => {
     return (
       <li className="row" key={product.pid}>
         <p>
-          {product.name}, cena: {parseFloat(product.price)} zł
+          {product.name}, cena: <strong>{parseFloat(product.price)} zł</strong>
         </p>
         <QuantityOfProducts
           product={product}
@@ -124,7 +124,7 @@ const App: React.FC<AppProps> = () => {
       <h3>Lista produktów</h3>
       <ul>
         {productsCart}
-        <p>Całkowita suma zamówienia: {totalPrice}</p>
+        <p>Całkowita suma zamówienia: <strong>{totalPrice} zł</strong></p>
       </ul>
     </div>
   );

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ICart } from '../../shared/interface/cart.interface';
 import { polishPlural } from '../App/helpers/polishPlural';
 
-import "./QuantityOfProducts.css";
+import "./QuantityOfProducts.scss";
 
 export interface QuantityOfProductsProps {
   product: ICart,
@@ -17,8 +17,8 @@ const QuantityOfProducts: React.FC<QuantityOfProductsProps> = ({
 }) => (
   <div className="quantity-products-container">
     <p>
-      Obecnie masz {quantityProduct}
-      {polishPlural("sztukę", "sztuki", "sztuk", quantityProduct)} produktu
+      Obecnie masz {quantityProduct} {" "}
+       {polishPlural("sztukę", "sztuki", "sztuk", quantityProduct)} produktu
     </p>
     <button
       className="quantity-button"
