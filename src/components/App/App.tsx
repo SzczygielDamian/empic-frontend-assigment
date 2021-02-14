@@ -11,20 +11,21 @@ import "./App.css";
 import { ICart } from "../../shared/interface/cart.interface";
 import { IProductsCart } from "../../shared/interface/productCart.interface";
 import { getUpdatedQuantity } from "./helpers/getUpdatedQuantity";
+import { IProductCheck } from "../../shared/interface/productCheck.interface";
 
 
 const productCheck = (
-  product: any,
-  action: any,
+  product: IProductCheck,
+  action: string,
   changeQuantityCallback: any,
   resetToMinQuantityCallback: any
 ) => {
   axios
     .post("http://localhost:3030/api/product/check", product)
-    .then((res: any) => {
+    .then((res) => {
       changeQuantityCallback(product.pid, action);
     })
-    .catch((error: any) => {
+    .catch((error) => {
       alert(error.response.data.message);
       resetToMinQuantityCallback(product.pid);
     });
@@ -39,7 +40,7 @@ const App: React.FC<AppProps> = () => {
   const totalPrice = useMemo(
     () =>
       Object.values(cart).reduce(
-        (acc: any, curr: any) =>
+        (acc: number, curr: ICart) =>
           Math.round(
             (acc + curr.quantity * parseFloat(curr.price) + Number.EPSILON) *
               100
@@ -51,10 +52,10 @@ const App: React.FC<AppProps> = () => {
 
   const getDate = () => {
     axios
-      .get("http://localhost:3030/api/cart")
-      .then((data: any) => {
+      .get<ICart[]>("http://localhost:3030/api/cart")
+      .then((data) => {
         const cart = data.data.reduce(
-          (acc: any, curr: any) => ({
+          (acc, curr) => ({
             ...acc,
             [curr.pid]: { ...curr, quantity: curr.min },
           }),
@@ -62,7 +63,7 @@ const App: React.FC<AppProps> = () => {
         );
         setCart(cart);
       })
-      .catch((error: any) => {
+      .catch((error) => {
         console.log(error.response.data.message);
       });
   };
@@ -107,7 +108,7 @@ const App: React.FC<AppProps> = () => {
     return (
       <li className="row" key={product.pid}>
         <p>
-          {product.name}, cena: {parseFloat(product.price)} zł{" "}
+          {product.name}, cena: {parseFloat(product.price)} zł
         </p>
         <QuantityOfProducts
           product={product}
@@ -121,7 +122,6 @@ const App: React.FC<AppProps> = () => {
   return (
     <div className="container">
       <h3>Lista produktów</h3>
-      {console.log(cart)}
       <ul>
         {productsCart}
         <p>Całkowita suma zamówienia: {totalPrice}</p>

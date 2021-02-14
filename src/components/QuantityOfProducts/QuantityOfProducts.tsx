@@ -1,11 +1,12 @@
 import * as React from 'react';
+import { ICart } from '../../shared/interface/cart.interface';
 import { polishPlural } from '../App/helpers/polishPlural';
 
 import "./QuantityOfProducts.css";
 
 export interface QuantityOfProductsProps {
-  product: any,
-  quantityProduct: any,
+  product: ICart,
+  quantityProduct: number,
   changeTheQuantityProduct: any,
 }
  
