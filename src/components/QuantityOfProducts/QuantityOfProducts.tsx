@@ -1,25 +1,7 @@
 import * as React from 'react';
+import { polishPlural } from '../App/helpers/polishPlural';
 
 import "./QuantityOfProducts.css";
-
-function polishPlural(
-  singularNominativ: any,
-  pluralNominativ: any,
-  pluralGenitive: any,
-  value: any
-) {
-  if (value === 1) {
-    return singularNominativ;
-  } else if (
-    value % 10 >= 2 &&
-    value % 10 <= 4 &&
-    (value % 100 < 10 || value % 100 >= 20)
-  ) {
-    return pluralNominativ;
-  } else {
-    return pluralGenitive;
-  }
-}
 
 export interface QuantityOfProductsProps {
   product: any,

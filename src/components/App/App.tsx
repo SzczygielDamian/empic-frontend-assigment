@@ -10,11 +10,8 @@ import "./App.css";
 
 import { ICart } from "../../shared/interface/cart.interface";
 import { IProductsCart } from "../../shared/interface/productCart.interface";
+import { getUpdatedQuantity } from "./helpers/getUpdatedQuantity";
 
-
-
-const getUpdatedQuantity = (quantity: number, action: string) =>
-  quantity + (action === "add" ? +1 : -1);
 
 const productCheck = (
   product: any,
